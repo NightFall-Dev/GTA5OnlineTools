@@ -37,7 +37,7 @@ jobs:
       with:
           name: binary
           path: |
-            bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll
+            .../bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll
     - name: Generate Build Info
       id: var
       run: |
