@@ -25,3 +25,6 @@ jobs:
       working-directory: GTA5OnlineTools
     - name: Build
       run: dotnet build --no-restore
+      working-directory: GTA5OnlineTools
+    - name: Check if DLL got built
+      run: if (-Not (Test-Path -path "bin/x64/net6.0-windows/GTA5OnlineTools.dll")) {throw 1}
