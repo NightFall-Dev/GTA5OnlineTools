@@ -32,6 +32,7 @@ jobs:
       - name: Build 64bit release DLL
         run: |
           msbuild /p:Configuration=Release /p:Platform=x64 GTA5OnlineTools.sln /warnaserror
+          working-directory: GTA5OnlineTools
 
       - name: Rename DLL to GTA5OnlineTools.dll
         run: ren GTA5OnlineTools.dll GTA5OnlineTools.dll
