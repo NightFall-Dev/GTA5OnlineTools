@@ -7,7 +7,9 @@ jobs:
   build:
 
     runs-on: windows-latest
-
+    defaults:
+      run:
+        working-directory: ./GTA5OnlineTools
     steps:
     #- uses: actions/checkout@v3
     - name: Setup .NET
@@ -16,8 +18,8 @@ jobs:
         dotnet-version: 6.0.x
     - name: Clone repository
       run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
-    - name: Change dir
-      run: dir
+    #- name: Change dir
+    #  run: dir
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
