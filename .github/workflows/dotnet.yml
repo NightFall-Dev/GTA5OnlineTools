@@ -10,9 +10,9 @@ jobs:
     outputs:
       full_sha: ${{ steps.var.outputs.full_sha }}
       short_sha: ${{ steps.var.outputs.short_sha }}
-    defaults:
-      run:
-        working-directory: .
+    #defaults:
+    #  run:
+    #    working-directory: .
     steps:
     #- uses: actions/checkout@v3
     - name: Setup .NET Core SDK
@@ -23,15 +23,16 @@ jobs:
     #  uses: microsoft/setup-msbuild@v1.1
     - name: Clone repository
       run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
-      #working-directory: ${{env.GITHUB_WORKSPACE}}
+      working-directory: ../../..
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: ../../..
     - name: Build
       run: dotnet build --configuration Release
-      #working-directory: GTA5OnlineTools
+      working-directory: ../../..
     - name: Check if DLL got built
       run: if (-Not (Test-Path -path "bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll")) {throw 1}
-      #working-directory: GTA5OnlineTools
+      working-directory: ../../..
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
