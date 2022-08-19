@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="GTA5OnlineTools.Views.UC0IndexView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
+    Style="{StaticResource UserControlStyle_Loaded}"
+    mc:Ignorable="d">
+
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <StackPanel
+                Margin="10,5,0,5"
+                DockPanel.Dock="Top"
+                Orientation="Horizontal">
+                <emoji:TextBlock
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Text="📃 最新公告" />
+            </StackPanel>
+            <TextBox
+                Padding="5"
+                DockPanel.Dock="Bottom"
+                Style="{StaticResource TextBoxStyle_ShowInfo}"
+                Text="{Binding UC0IndexModel.NoticeInfo}"
+                ToolTip="每次打开小助手都会获取最新辅助公告信息" />
+        </DockPanel>
+    </Grid>
+
+</UserControl>

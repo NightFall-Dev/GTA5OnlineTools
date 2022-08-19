@@ -1,0 +1,131 @@
+﻿<Window
+    x:Class="GTA5OnlineTools.Modules.Kits.UpdateWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="Window_Update"
+    Title="GTA5 online assistant online update"
+    Width="700"
+    Height="400"
+    Background="White"
+    Closing="Window_Update_Closing"
+    Loaded="Window_Update_Loaded"
+    ResizeMode="CanMinimize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="Normal" />
+    </Window.TaskbarItemInfo>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="127*"/>
+            <ColumnDefinition Width="573*"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel LastChildFill="True" Grid.ColumnSpan="2">
+            <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Text="Download updates manually" />
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource TextBlockUpdate}">
+                        <Hyperlink NavigateUri="https://github.com/CrazyZhang666/GTA5OnlineTools/releases" RequestNavigate="Hyperlink_RequestNavigate">
+                            GitHub
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource TextBlockUpdate}">
+                        <Hyperlink NavigateUri="https://crazyzhang.lanzouf.com/b04md71ve" RequestNavigate="Hyperlink_RequestNavigate">
+                            Lanzou [recommended]
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource TextBlockUpdate}">
+                        <Hyperlink NavigateUri="https://www.123pan.com/s/QEorVv-Bfzv3" RequestNavigate="Hyperlink_RequestNavigate">
+                            123pan[recommended]
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+                <Button
+                    x:Name="Button_CancelUpdate"
+                    Click="Button_CancelUpdate_Click"
+                    Content="Cancel"
+                    DockPanel.Dock="Right"
+                    Style="{StaticResource ButtonStyle_Web}" />
+                <Button
+                    x:Name="Button_Update"
+                    Click="Button_Update_Click"
+                    Content="Update"
+                    DockPanel.Dock="Right"
+                    Style="{StaticResource ButtonStyle_Web}" />
+            </DockPanel>
+
+            <Grid DockPanel.Dock="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Margin="5">
+                    <Border Style="{StaticResource BorderStyle_DropShadowEffect}" />
+                    <DockPanel LastChildFill="True">
+                        <StackPanel
+                            Margin="10,10,10,0"
+                            DockPanel.Dock="Top"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="0,0,5,0"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Foreground="Black"
+                                Style="{StaticResource TextBlockStyle_IconFontBase}"
+                                Text="&#xe624;" />
+                            <TextBlock
+                                FontFamily="Arial"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="download node" />
+                        </StackPanel>
+                        <ListBox
+                            x:Name="ListBox_DownloadAddress"
+                            Margin="5"
+                            Style="{StaticResource ListBoxStyle_Normal}" />
+                    </DockPanel>
+                </Grid>
+
+                <DockPanel Grid.Row="1" LastChildFill="True">
+                    <TextBlock
+                        Margin="5"
+                        DockPanel.Dock="Right"
+                        Foreground="Green"
+                        Text="Tip: Select any of the above nodes to download and update" />
+                    <TextBlock
+                        x:Name="TextBlock_Info"
+                        Margin="5"
+                        DockPanel.Dock="Left"
+                        Text="Download information" />
+                </DockPanel>
+
+                <Grid Grid.Row="2">
+                    <ProgressBar
+                        Name="ProgressBar_Update"
+                        Grid.Row="1"
+                        Height="35"
+                        Margin="5"
+                        VerticalAlignment="Center"
+                        SmallChange="1" />
+                    <TextBlock
+                        Name="TextBlock_Percentage"
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="0KB / 0MB" />
+                </Grid>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>

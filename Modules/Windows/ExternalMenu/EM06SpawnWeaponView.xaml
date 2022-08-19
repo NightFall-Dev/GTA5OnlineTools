@@ -1,0 +1,159 @@
+﻿<UserControl
+    x:Class="GTA5OnlineTools.Modules.Windows.ExternalMenu.EM06SpawnWeaponView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:attached="clr-namespace:GTA5OnlineTools.Assets.Styles.Attached"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="600"
+    d:DesignWidth="900"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+
+        <Style BasedOn="{StaticResource ButtonStyle_Normal}" TargetType="{x:Type Button}" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <!--  面板1  -->
+        <ListBox
+            x:Name="ListBox_WeaponList"
+            Grid.Column="0"
+            Margin="5,5,2.5,5"
+            SelectedIndex="0"
+            SelectionChanged="ListBox_WeaponList_SelectionChanged"
+            Style="{StaticResource ListBoxStyle_Normal}" />
+        <!--  面板2  -->
+        <ListBox
+            x:Name="ListBox_WeaponInfo"
+            Grid.Column="1"
+            Margin="2.5,5,0,5"
+            SelectedIndex="0"
+            SelectionChanged="ListBox_WeaponInfo_SelectionChanged"
+            Style="{StaticResource ListBoxStyle_Normal}" />
+        <!--  面板3  -->
+        <StackPanel Grid.Column="2">
+            <Label
+                attached:Icon.Value="☕"
+                Content="弹药编辑"
+                Style="{StaticResource LabelStyle_Title}" />
+            <WrapPanel Margin="3,0,3,0">
+                <RadioButton
+                    x:Name="RadioButton_AmmoModifier_None"
+                    Margin="5"
+                    Click="RadioButton_AmmoModifier_None_Click"
+                    Content="默认"
+                    IsChecked="True" />
+                <RadioButton
+                    x:Name="RadioButton_AmmoModifier_AMMO"
+                    Margin="5"
+                    Click="RadioButton_AmmoModifier_None_Click"
+                    Content="无限弹药" />
+                <RadioButton
+                    x:Name="RadioButton_AmmoModifier_CLIP"
+                    Margin="5"
+                    Click="RadioButton_AmmoModifier_None_Click"
+                    Content="无限弹夹" />
+                <RadioButton
+                    x:Name="RadioButton_AmmoModifier_Both"
+                    Margin="5"
+                    Click="RadioButton_AmmoModifier_None_Click"
+                    Content="无限弹药和弹夹" />
+            </WrapPanel>
+
+            <Label
+                attached:Icon.Value="☕"
+                Content="高级"
+                Style="{StaticResource LabelStyle_Title}" />
+            <StackPanel Margin="3,0,3,0">
+                <CheckBox
+                    x:Name="CheckBox_ReloadMult"
+                    Click="CheckBox_ReloadMult_Click"
+                    Content="快速换弹" />
+            </StackPanel>
+            <WrapPanel Margin="3,0,3,0">
+                <Button
+                    x:Name="Button_NoRecoil"
+                    Click="Button_NoRecoil_Click"
+                    Content="无后坐力" />
+                <Button
+                    x:Name="CheckBox_NoSpread"
+                    Click="CheckBox_NoSpread_Click"
+                    Content="无子弹扩散" />
+                <Button
+                    x:Name="CheckBox_Range"
+                    Click="CheckBox_Range_Click"
+                    Content="提升射程" />
+            </WrapPanel>
+
+            <Label
+                attached:Icon.Value="☕"
+                Content="子弹类型"
+                Style="{StaticResource LabelStyle_Title}" />
+            <StackPanel Margin="3,0,3,0">
+                <CheckBox
+                    x:Name="CheckBox_ImpactType"
+                    Click="CheckBox_ImpactType_Click"
+                    Content="启用子弹类型" />
+                <ComboBox
+                    x:Name="ComboBox_ImpactExplosion"
+                    Margin="5"
+                    Padding="7"
+                    VerticalContentAlignment="Center"
+                    SelectedIndex="0"
+                    SelectionChanged="ComboBox_ImpactExplosion_SelectionChanged">
+                    <ComboBox.Resources>
+                        <Style TargetType="{x:Type ComboBoxItem}">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Padding" Value="5" />
+                        </Style>
+                    </ComboBox.Resources>
+                </ComboBox>
+                <TextBlock
+                    Margin="5"
+                    Foreground="Green"
+                    TextWrapping="Wrap">
+                    注意：如果你修改的武器和NPC使用的武器一样，那么他们的子弹类型也会一并修改
+                </TextBlock>
+            </StackPanel>
+
+            <Label
+                attached:Icon.Value="☕"
+                Content="快捷功能"
+                Style="{StaticResource LabelStyle_Title}" />
+            <WrapPanel Margin="3,0,3,0">
+                <Button
+                    x:Name="Button_FillCurrentAmmo"
+                    Click="Button_FillCurrentAmmo_Click"
+                    Content="补满当前武器弹药" />
+                <Button
+                    x:Name="Button_FillAllAmmo"
+                    Click="Button_FillAllAmmo_Click"
+                    Content="补满全部武器弹药" />
+            </WrapPanel>
+
+            <StackPanel Margin="5" DockPanel.Dock="Bottom">
+                <TextBlock Style="{StaticResource TextBlockStyle_Title000}" Text="武器自定义" />
+                <Button
+                    x:Name="Button_SpawnWeapon"
+                    Margin="5,2,5,5"
+                    Click="Button_SpawnWeapon_Click"
+                    Content="刷出线上武器"
+                    DockPanel.Dock="Bottom" />
+                <TextBlock
+                    Margin="5"
+                    Foreground="Green"
+                    Text="提示：部分武器刷不出来是正常现象，请多次尝试" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,120 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Platforms>x64</Platforms>
+    <StartupObject>GTA5OnlineTools.App</StartupObject>
+    <AssemblyVersion>3.0.4.4</AssemblyVersion>
+    <FileVersion>3.0.4.4</FileVersion>
+    <ApplicationIcon>Assets\Images\Favicon.ico</ApplicationIcon>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <DebugType>full</DebugType>
+    <SignAssembly>False</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Fonts\iconfont.ttf" />
+    <None Remove="Assets\Images\Donate.png" />
+    <None Remove="Assets\Images\Favicon.ico" />
+    <None Remove="Assets\Images\Hacks\BincoHax.png" />
+    <None Remove="Assets\Images\Hacks\GTAHax.png" />
+    <None Remove="Assets\Images\Hacks\Kiddion.png" />
+    <None Remove="Assets\Images\Hacks\LSCHax.png" />
+    <None Remove="Assets\Images\Hacks\YimMenu.png" />
+    <None Remove="Assets\Images\Launch.png" />
+    <None Remove="Assets\Images\Poster\Casino01.jpg" />
+    <None Remove="Assets\Images\Poster\Casino02.jpg" />
+    <None Remove="Assets\Images\Tips\InputENG.png" />
+    <None Remove="Assets\Images\Tips\PericoHeist01.png" />
+    <None Remove="Assets\Images\Tips\PericoHeist02.png" />
+    <None Remove="Assets\Images\Tips\PlayerName.png" />
+    <None Remove="Features\Files\BincoHax.exe" />
+    <None Remove="Features\Files\BlcokMsg.dll" />
+    <None Remove="Features\Files\config.json" />
+    <None Remove="Features\Files\dControl.exe" />
+    <None Remove="Features\Files\dControl.ini" />
+    <None Remove="Features\Files\GTAHax.exe" />
+    <None Remove="Features\Files\Kiddion\key87\config.json" />
+    <None Remove="Features\Files\Kiddion.exe" />
+    <None Remove="Features\Files\Kiddion\themes.json" />
+    <None Remove="Features\Files\LSCHax.exe" />
+    <None Remove="Features\Files\Kiddion\scripts\Readme.api" />
+    <None Remove="Features\Files\Other\SGTA50000" />
+    <None Remove="Features\Files\stat.txt" />
+    <None Remove="Features\Files\teleports.json" />
+    <None Remove="Features\Files\vehicles.json" />
+    <None Remove="Features\Files\YimMenu.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Features\Files\BincoHax.exe" />
+    <EmbeddedResource Include="Features\Files\Inject\BlcokMsg.dll" />
+    <EmbeddedResource Include="Features\Files\Kiddion\config.json" />
+    <EmbeddedResource Include="Features\Files\dControl.exe" />
+    <EmbeddedResource Include="Features\Files\dControl.ini" />
+    <EmbeddedResource Include="Features\Files\Kiddion\themes.json" />
+    <EmbeddedResource Include="Features\Files\GTAHax.exe" />
+    <EmbeddedResource Include="Features\Files\Kiddion\key87\config.json" />
+    <EmbeddedResource Include="Features\Files\Kiddion\Kiddion.exe" />
+    <EmbeddedResource Include="Features\Files\Kiddion\Kiddion_Chs.exe" />
+    <EmbeddedResource Include="Features\Files\LSCHax.exe" />
+    <EmbeddedResource Include="Features\Files\Kiddion\scripts\Readme.api" />
+    <EmbeddedResource Include="Features\Files\Other\SGTA50000" />
+    <EmbeddedResource Include="Features\Files\stat.txt" />
+    <EmbeddedResource Include="Features\Files\Kiddion\teleports.json" />
+    <EmbeddedResource Include="Features\Files\Kiddion\vehicles.json" />
+    <EmbeddedResource Include="Features\Files\Inject\YimMenu.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Chinese" Version="0.5.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Downloader" Version="2.3.5" />
+    <PackageReference Include="Emoji.Wpf" Version="0.3.3" />
+    <PackageReference Include="GameOverlay.Net" Version="4.3.1" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\iconfont.ttf" />
+    <Resource Include="Assets\Images\Donate.png" />
+    <Resource Include="Assets\Images\Favicon.ico" />
+    <Resource Include="Assets\Images\Hacks\BincoHax.png" />
+    <Resource Include="Assets\Images\Hacks\GTAHax.png" />
+    <Resource Include="Assets\Images\Hacks\Kiddion.png" />
+    <Resource Include="Assets\Images\Hacks\LSCHax.png" />
+    <Resource Include="Assets\Images\Hacks\YimMenu.png" />
+    <Resource Include="Assets\Images\Launch.png" />
+    <Resource Include="Assets\Images\Poster\Casino01.jpg" />
+    <Resource Include="Assets\Images\Poster\Casino02.jpg" />
+    <Resource Include="Assets\Images\Tips\InputENG.png" />
+    <Resource Include="Assets\Images\Tips\PericoHeist01.png" />
+    <Resource Include="Assets\Images\Tips\PericoHeist02.png" />
+    <Resource Include="Assets\Images\Tips\PlayerName.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+</Project>

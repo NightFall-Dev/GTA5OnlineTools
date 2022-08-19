@@ -1,0 +1,954 @@
+﻿<Window
+    x:Class="GTA5OnlineTools.Modules.Windows.BigBaseV2Window"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:attached="clr-namespace:GTA5OnlineTools.Assets.Styles.Attached"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="Window_BigBaseV2"
+    Title="BigBaseV2 - STAT编辑/解锁"
+    Closing="Window_BigBaseV2_Closing"
+    Loaded="Window_BigBaseV2_Loaded"
+    Style="{StaticResource WindowStyle_Normal}"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <Style BasedOn="{StaticResource TextBoxStyle_ENInput}" TargetType="{x:Type TextBox}">
+            <Setter Property="IsReadOnly" Value="True" />
+        </Style>
+    </Window.Resources>
+
+    <TabControl
+        Name="TabControl_Main"
+        Margin="5"
+        Style="{StaticResource TabControlStyle_Main}">
+        <TabControl.Resources>
+            <Style BasedOn="{StaticResource TabItemStyle_Main}" TargetType="{x:Type TabItem}" />
+        </TabControl.Resources>
+
+        <TabItem Header="主页">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+                <UniformGrid Columns="2">
+                    <GroupBox
+                        Margin="5"
+                        Header="功能简介"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <RichTextBox BorderThickness="0" Style="{StaticResource RichTextBoxStyle_Page}">
+                            <FlowDocument>
+                                <Paragraph Style="{StaticResource ParagraphStyle_Title}">
+                                    简介
+                                </Paragraph>
+                                <Paragraph Style="{StaticResource ParagraphStyle_Content}">
+                                    有的数据是需要计算的，比如：总收入=现金+银行+分类收入（差事+下注+分成+车辆销售额+拾取金额+其他...）
+                                </Paragraph>
+                                <Paragraph Style="{StaticResource ParagraphStyle_Content}">
+                                    其它数据也是类似的原理，而不是乱改一气，否则所有可能产生的风险将由玩家自行承担
+                                </Paragraph>
+                                <Paragraph Style="{StaticResource ParagraphStyle_Content}">
+                                    MP0_这种类型的数据区分角色，如果读不出来，可以尝试把MP0改为MP1
+                                </Paragraph>
+                                <Paragraph Style="{StaticResource ParagraphStyle_Content}">
+                                    Social Club 线上角色数据查询<LineBreak />
+                                    <Hyperlink NavigateUri="https://socialclub.rockstargames.com/games/gtav/pc/career/overview/gtaonline" RequestNavigate="Hyperlink_RequestNavigate">
+                                        https://socialclub.rockstargames.com/games/gtav/pc/career/overview/gtaonline
+                                    </Hyperlink>
+                                </Paragraph>
+
+                            </FlowDocument>
+                        </RichTextBox>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="DLL注入器"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Margin="5">
+                                <Border Style="{StaticResource BorderStyle_DropShadowEffect}" />
+                                <DockPanel LastChildFill="True">
+                                    <StackPanel
+                                        Margin="10,10,0,0"
+                                        DockPanel.Dock="Top"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,5,0"
+                                            Style="{StaticResource TextBlockStyle_IconFontInfo}"
+                                            Text="&#xe624;" />
+                                        <TextBlock
+                                            FontSize="18"
+                                            FontWeight="Bold"
+                                            Text="操作日志" />
+                                    </StackPanel>
+                                    <TextBox
+                                        x:Name="TextBox_Log"
+                                        Margin="5"
+                                        AcceptsReturn="False"
+                                        BorderBrush="Gray"
+                                        BorderThickness="0"
+                                        Style="{StaticResource TextBoxStyle_Normal}"
+                                        TextWrapping="WrapWithOverflow" />
+                                </DockPanel>
+                            </Grid>
+
+                            <StackPanel Grid.Row="1">
+                                <Label
+                                    attached:Icon.Value="☕"
+                                    Content="选择你要注入的DLL（鼠标悬浮菜单名称可以预览）"
+                                    Style="{StaticResource LabelStyle_Title}" />
+                                <WrapPanel Margin="5" Orientation="Horizontal">
+                                    <RadioButton
+                                        x:Name="RadioButton_InjectDLL_Bread"
+                                        Margin="5,5,10,5"
+                                        Click="RadioButton_InjectDLL_Bread_Click"
+                                        Content="已禁用"
+                                        IsChecked="False"
+                                        IsEnabled="False" />
+                                </WrapPanel>
+
+                                <Label
+                                    attached:Icon.Value="☕"
+                                    Content="功能"
+                                    Style="{StaticResource LabelStyle_Title}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        x:Name="Button_BigBaseV2_Inject"
+                                        Click="Button_BigBaseV2_Inject_Click"
+                                        Content="注入DLL到GTA5进程"
+                                        IsEnabled="False"
+                                        Style="{StaticResource ButtonStyle_Normal}" />
+                                    <Button
+                                        x:Name="Button_Located_Stats"
+                                        Click="Button_Located_Stats_Click"
+                                        Content="打开BigBaseV2配置文件夹"
+                                        Style="{StaticResource ButtonStyle_Normal}" />
+                                </StackPanel>
+                                <TextBlock
+                                    Margin="5"
+                                    Foreground="Red"
+                                    TextWrapping="Wrap">
+                                    警告：为了安全起见，请在故事模式注入，然后再进入线上
+                                </TextBlock>
+                                <TextBlock Margin="5" TextWrapping="Wrap">
+                                    提示：注入成功后，按 INSERT 键显示/隐藏菜单。在对应菜单中点击 Unload 按钮退出菜单（请勿关闭对应控制台窗口）
+                                </TextBlock>
+                                <TextBlock
+                                    Margin="5"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    Foreground="Red">
+                                    警告：非必要请勿使用此工具，可能会有风险
+                                </TextBlock>
+
+                            </StackPanel>
+
+                        </Grid>
+                    </GroupBox>
+                </UniformGrid>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="生涯">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+                <UniformGrid Columns="3">
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分1"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="全球声望值排名 - short" />
+                            <TextBox Text="MPPLY_GLOBALXP" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="总收入 - s64" />
+                            <TextBox Text="MPPLY_TOTAL_EVC" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="总花费 - s64" />
+                            <TextBox Text="MPPLY_TOTAL_SVC" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="杀死的玩家总数 - int" />
+                            <TextBox Text="MPPLY_KILLS_PLAYERS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="被其他玩家杀死的总次数 - int" />
+                            <TextBox Text="MPPLY_DEATHS_PLAYER" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="玩家对战击杀/死亡比 - float" />
+                            <TextBox Text="MPPLY_KILL_DEATH_RATIO" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分2"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="行走距离 - float" />
+                            <TextBox Text="MPPLY_CHAR_DIST_TRAVELLED" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="最喜爱的无线电台 - int" />
+                            <TextBox Text="MPPLY_MOST_FAVORITE_STATION" ToolTip="输入电台对应的哈希值（具体哈希值未知）" />
+
+                            <TextBlock FontWeight="Bold" Text="GTA在线模式中花费的时间 - u64" />
+                            <TextBox Text="MP_PLAYING_TIME" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="以第一人称视角进行游戏的时间 - u64" />
+                            <TextBox Text="MP_FIRST_PERSON_CAM_TIME" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="死斗游戏中花费的时间 - u64" />
+                            <TextBox Text="MPPLY_TOTAL_TIME_SPENT_DEATHMAT" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="竞速中花费的时间 - u64" />
+                            <TextBox Text="MPPLY_TOTAL_TIME_SPENT_RACES" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="制作器中花费的时间 - u64" />
+                            <TextBox Text="MPPLY_TOTAL_TIME_MISSION_CREATO" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分3"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="死斗游戏发布次数 - int" />
+                            <TextBox Text="MPPLY_AWD_FM_CR_DM_MADE">
+                                <TextBox.ToolTip>
+                                    <TextBlock Text="暂无提示" />
+                                </TextBox.ToolTip>
+                            </TextBox>
+
+                            <TextBlock FontWeight="Bold" Text="竞速发布次数 - int" />
+                            <TextBox Text="MPPLY_AWD_FM_CR_RACES_MADE" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="夺取发布次数 - int" />
+                            <TextBox Text="MPPLY_NUM_CAPTURES_CREATED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="团队生存游戏发布次数 - int" />
+                            <TextBox Text="MPPLY_LTS_CREATED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="他人游玩您发布的内容的次数 - int" />
+                            <TextBox Text="MPPLY_AWD_FM_CR_PLAYED_BY_PEEP" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="您发布的内容所获好评数 - int" />
+                            <TextBox Text="MPPLY_FM_MISSION_LIKES" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                </UniformGrid>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="技能">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+                <UniformGrid Columns="3">
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分1"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="体力 - int" />
+                            <TextBox Text="MP0_SCRIPT_INCREASE_STAM" ToolTip="数值范围0~100" />
+
+                            <TextBlock FontWeight="Bold" Text="射击技能 - int" />
+                            <TextBox Text="MP0_SCRIPT_INCREASE_SHO" ToolTip="数值范围0~100" />
+
+                            <TextBlock FontWeight="Bold" Text="力量 - int" />
+                            <TextBox Text="MP0_SCRIPT_INCREASE_STRN" ToolTip="数值范围0~100" />
+
+                            <TextBlock FontWeight="Bold" Text="潜行 - int" />
+                            <TextBox Text="MP0_SCRIPT_INCREASE_STL" ToolTip="数值范围0~100" />
+
+                            <TextBlock FontWeight="Bold" Text="飞行技能 - int" />
+                            <TextBox Text="MP0_SCRIPT_INCREASE_FLY" ToolTip="数值范围0~100" />
+
+                            <TextBlock FontWeight="Bold" Text="驾驶技能 - int" />
+                            <TextBox Text="MP0_SCRIPT_INCREASE_DRIV" ToolTip="数值范围0~100" />
+
+                            <TextBlock FontWeight="Bold" Text="肺活量 - int" />
+                            <TextBox Text="MP0_SCRIPT_INCREASE_LUNG" ToolTip="数值范围0~100" />
+
+                            <TextBlock FontWeight="Bold" Text="精神状态 - float" />
+                            <TextBox Text="MP0_PLAYER_MENTAL_STATE" ToolTip="未知" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分2"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical" />
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分3"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical" />
+                    </GroupBox>
+                </UniformGrid>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="通用">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+                <UniformGrid Columns="3">
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分1"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="第三人称视角游戏时间 - u64" />
+                            <TextBox Text="MP0_TOTAL_PLAYING_TIME" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="制作的角色 - date" />
+                            <TextBox Text="MP0_CHAR_DATE_CREATED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="最后一次升级 - date" />
+                            <TextBox Text="MP0_CHAR_DATE_RANKUP" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="持续时间最长单人战局 - u64" />
+                            <TextBox Text="MP0_LONGEST_PLAYING_TIME" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="每场战局平均用时 - u64" />
+                            <TextBox Text="MP0_AVERAGE_TIME_PER_SESSON" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock Margin="5" />
+
+                            <TextBlock FontWeight="Bold" Text="死亡总数 - int" />
+                            <TextBox Text="MP0_DEATHS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="爆炸死亡数 - int" />
+                            <TextBox Text="MP0_DIED_IN_EXPLOSION" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="坠落死亡数 - int" />
+                            <TextBox Text="MP0_DIED_IN_FALL" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="火烧死亡数 - int" />
+                            <TextBox Text="MP0_DIED_IN_FIRE" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分2"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="撞死次数 - int" />
+                            <TextBox Text="MP0_DIED_IN_ROAD" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="溺水死亡数 - int" />
+                            <TextBox Text="MP0_DIED_IN_DROWNING" ToolTip="暂无提示" />
+
+                            <TextBlock Margin="5" />
+
+                            <TextBlock FontWeight="Bold" Text="游泳时间 - u64" />
+                            <TextBox Text="MP0_TIME_SWIMMING" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="游泳距离 - float" />
+                            <TextBox Text="MP0_DIST_SWIMMING" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="潜水时间 - u64" />
+                            <TextBox Text="MP0_TIME_UNDERWATER" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="步行时间 - u64" />
+                            <TextBox Text="MP0_TIME_WALKING" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="步行距离 - float" />
+                            <TextBox Text="MP0_DIST_WALKING" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="跑步距离 - float" />
+                            <TextBox Text="MP0_DIST_RUNNING" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="坠落存活的最高高度 - float" />
+                            <TextBox Text="MP0_LONGEST_SURVIVED_FREEFALL" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="掩体躲藏时间 - u64" />
+                            <TextBox Text="MP0_TIME_IN_COVER" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分3"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="拍摄照片数 - int" />
+                            <TextBox Text="MP0_NO_PHOTOS_TAKEN" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="私人艳舞次数 - int" />
+                            <TextBox Text="MP0_LAP_DANCED_BOUGHT" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="买春次数 - int" />
+                            <TextBox Text="MP0_PROSTITUTES_FREQUENTED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="对其他人施加的悬赏 - int" />
+                            <TextBox Text="MP0_BOUNTPLACED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="对您施加的悬赏 - int" />
+                            <TextBox Text="MP0_BOUNTSONU" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="达到的最高生存战波数 - int" />
+                            <TextBox Text="MP0_HORDELVL" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="摩托帮贡献值 - int" />
+                            <TextBox Text="MP0_MC_CONTRIBUTION_POINTS" ToolTip="暂无提示" />
+                        </StackPanel>
+                    </GroupBox>
+                </UniformGrid>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="犯罪">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+                <UniformGrid Columns="3">
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分1"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="击杀警察数 - int" />
+                            <TextBox Text="MP0_KILLS_COP" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="击杀国安局人员数 - int" />
+                            <TextBox Text="MP0_KILLS_SWAT" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="被通缉次数 - int" />
+                            <TextBox Text="MP0_NO_TIMES_WANTED_LEVEL" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="已获得通缉星数 - int" />
+                            <TextBox Text="MP0_STARS_ATTAINED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="消除的通缉星数 - int" />
+                            <TextBox Text="MP0_STARS_EVADED" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分2"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="被通缉持续时间 - u64" />
+                            <TextBox Text="MP0_TOTAL_CHASE_TIME" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="上一次通缉等级持续时间 - u64" />
+                            <TextBox Text="MP0_LAST_CHASE_TIME" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="最长通缉等级持续时间 - u64" />
+                            <TextBox Text="MP0_LONGEST_CHASE_TIME" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="五星通缉等级持续时间 - u64" />
+                            <TextBox Text="MP0_TOTAL_TIME_MAX_STARS" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock Margin="5" />
+
+                            <TextBlock FontWeight="Bold" Text="作为车手驾车射击击杀数 - int" />
+                            <TextBox Text="MP0_DB_KILLS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="作为乘客驾车射击击杀数 - int" />
+                            <TextBox Text="MP0_PASS_DB_KILLS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="射爆轮胎数 - int" />
+                            <TextBox Text="MP0_TIRES_POPPED_BY_GUNSHOT" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="载具击杀数 - int" />
+                            <TextBox Text="MP0_HIGHEST_SKITTLES" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分3"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="盗窃车辆数 - int" />
+                            <TextBox Text="MP0_NUMBER_STOLEN_CARS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="盗窃摩托数 - int" />
+                            <TextBox Text="MP0_NUMBER_STOLEN_BIKES" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="盗窃直升机数 - int" />
+                            <TextBox Text="MP0_NUMBER_STOLEN_HELIS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="盗窃飞机数 - int" />
+                            <TextBox Text="MP0_NUMBER_STOLEN_PLANES" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="盗窃船只数 - int" />
+                            <TextBox Text="MP0_NUMBER_STOLEN_BOATS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="盗窃沙滩车数 - int" />
+                            <TextBox Text="MP0_NUMBER_STOLEN_QUADBIKES" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="盗窃自行车数 - int" />
+                            <TextBox Text="MP0_NUMBER_STOLEN_BICYCLES" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="盗窃警用载具数 - int" />
+                            <TextBox Text="MP0_NUMBER_STOLEN_COP_VEHICLE" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="抢劫商店次数 - int" />
+                            <TextBox Text="MP0_TOTAL_NO_SHOPS_HELD_UP" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+                </UniformGrid>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="载具">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+                <UniformGrid Columns="3">
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分1"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="最喜欢的摩托车 - int" />
+                            <TextBox Text="MP0_FAVOUTFITBIKETYPEALLTIME" ToolTip="输入载具哈希值" />
+
+                            <TextBlock FontWeight="Bold" Text="最高液压跳跃高度 - float" />
+                            <TextBox Text="MP0_LOW_HYDRAULIC_JUMP" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="驾车时间 - u64" />
+                            <TextBox Text="MP0_TIME_DRIVING_CAR" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="汽车行驶距离 - float" />
+                            <TextBox Text="MP0_DIST_CAR" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="摩托车骑行时间 - u64" />
+                            <TextBox Text="MP0_TIME_DRIVING_BIKE" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="摩托车骑行距离 - float" />
+                            <TextBox Text="MP0_DIST_BIKE" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="直升机飞行时间 - u64" />
+                            <TextBox Text="MP0_TIME_DRIVING_HELI" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="直升机飞行距离 - float" />
+                            <TextBox Text="MP0_DIST_HELI" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="飞机飞行时间 - u64" />
+                            <TextBox Text="MP0_TIME_DRIVING_PLANE" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="飞机飞行距离 - float" />
+                            <TextBox Text="MP0_DIST_PLANE" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分2"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="船只航行时间 - u64" />
+                            <TextBox Text="MP0_TIME_DRIVING_BOAT" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="船只航行距离 - float" />
+                            <TextBox Text="MP0_DIST_BOAT" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="沙滩车驾驶时间 - u64" />
+                            <TextBox Text="MP0_TIME_DRIVING_QUADBIKE" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="沙滩车驾驶距离 - float" />
+                            <TextBox Text="MP0_DIST_QUADBIKE" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="自行车骑行时间 - u64" />
+                            <TextBox Text="MP0_TIME_DRIVING_BICYCLE" ToolTip="数值单位为毫秒，例如：需修改成1小时则输入3600000" />
+
+                            <TextBlock FontWeight="Bold" Text="自行车骑行距离 - float" />
+                            <TextBox Text="MP0_DIST_BICYCLE" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="驾驶陆上载具达到的最高速度 - float" />
+                            <TextBox Text="MP0_FASTEST_SPEED" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="驾驶过最快的陆上载具 - int" />
+                            <TextBox Text="MP0_TOP_SPEED_CAR" ToolTip="输入载具哈希值" />
+
+                            <TextBlock FontWeight="Bold" Text="最长急刹翘尾距离 - float" />
+                            <TextBox Text="MP0_LONGEST_STOPPIE_DIST" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="最长翘轮行驶距离 - float" />
+                            <TextBox Text="MP0_LONGEST_WHEELIE_DIST" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="最长无碰撞行驶距离 - float" />
+                            <TextBox Text="MP0_LONGEST_DRIVE_NOCRASH" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="撞车次数 - int" />
+                            <TextBox Text="MP0_NUMBER_CRASHES_CARS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="摩托车撞车次数 - int" />
+                            <TextBox Text="MP0_NUMBER_CRASHES_BIKES" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="沙滩车撞车次数 - int" />
+                            <TextBox Text="MP0_NUMBER_CRASHES_QUADBIKES" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="跳离移动载具次数 - int" />
+                            <TextBox Text="MP0_BAILED_FROM_VEHICLE" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="飞车最远距离 - float" />
+                            <TextBox Text="MP0_FARTHEST_JUMP_DIST" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                            <TextBlock FontWeight="Bold" Text="飞车最高高度 - float" />
+                            <TextBox Text="MP0_HIGHEST_JUMP_REACHED" ToolTip="数值单位为米，例如：需修改成1千米则输入1000" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分3"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="单次飞车最大翻转数 - int" />
+                            <TextBox Text="MP0_MOST_FLIPS_IN_ONE_JUMP" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="单次飞车最大旋转数 - int" />
+                            <TextBox Text="MP0_MOST_SPINS_IN_ONE_JUMP" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="已发现的独特飞车特技数 - int" />
+                            <TextBox Text="MP0_USJS_FOUND" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="已完成的独特飞车特技数 - int" />
+                            <TextBox Text="MP0_USJS_COMPLETED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="有惊无险次数 - int" />
+                            <TextBox Text="MP0_NUMBER_NEAR_MISS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="炸毁警车数 - int" />
+                            <TextBox Text="MP0_CARS_COPS_EXPLODED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="炸毁汽车数 - int" />
+                            <TextBox Text="MP0_CARS_EXPLODED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="炸毁摩托车数 - int" />
+                            <TextBox Text="MP0_BIKES_EXPLODED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="炸毁直升机数 - int" />
+                            <TextBox Text="MP0_HELIS_EXPLODED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="炸毁飞机数 - int" />
+                            <TextBox Text="MP0_PLANES_EXPLODED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="炸毁船只数 - int" />
+                            <TextBox Text="MP0_BOATS_EXPLODED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="炸毁沙滩车数 - int" />
+                            <TextBox Text="MP0_QUADBIKE_EXPLODED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="载具修理次数 - int" />
+                            <TextBox Text="MP0_NO_CARS_REPAIR" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="载具喷漆次数 - int" />
+                            <TextBox Text="MP0_VEHICLES_SPRAYED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="车辆已出口 - int" />
+                            <TextBox Text="MP0_VEHEXPORTED" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+                </UniformGrid>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="现金">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+                <UniformGrid Columns="3">
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分1"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="武器和护甲花费 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_WEAPON_ARMOR" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="载具和维护花费 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_VEH_MAINTENANCE" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="风格和娱乐花费 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_STYLE_ENT" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="资产和公用事业花费 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_PROPERTY_UTIL" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="差事和公用事业花费 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_JOB_ACTIVITY" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="联络人服务花费 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_CONTACT_SERVICE" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="医疗和保释花费 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_HEALTHCARE" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分2"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="丢失或被盗现金 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_DROPPED_STOLEN" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="给与他人金额 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_SHARED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="与他人共享的差事现金数额 - short" />
+                            <TextBox Text="MP0_MONEY_SPENT_JOBSHARED" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分3"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="差事收入 - short" />
+                            <TextBox Text="MP0_MONEY_EARN_JOBS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="出售载具收入 - short" />
+                            <TextBox Text="MP0_MONEY_EARN_SELLING_VEH" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="赌博收入 - short" />
+                            <TextBox Text="MP0_MONEY_EARN_BETTING" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="表现良好收入 - short" />
+                            <TextBox Text="MP0_MONEY_EARN_GOOD_SPORT" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="拾取金额 - short" />
+                            <TextBox Text="MP0_MONEY_EARN_PICKED_UP" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="他人给予金额 - short" />
+                            <TextBox Text="MP0_MONEY_EARN_SHARED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="由他人共享的差事现金数额 - short" />
+                            <TextBox Text="MP0_MONEY_EARN_JOBSHARED" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+                </UniformGrid>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="作战">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+                <UniformGrid Columns="3">
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分1"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="射击次数 - int" />
+                            <TextBox Text="MP0_SHOTS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="击中次数 - int" />
+                            <TextBox Text="MP0_HITS_PEDS_VEHICLES" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="精准度 - float" />
+                            <TextBox Text="MP0_WEAPON_ACCURACY" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="击杀数 - int" />
+                            <TextBox Text="MP0_KILLS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="爆头击杀数 - int" />
+                            <TextBox Text="MP0_HEADSHOTS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="持枪击杀数 - int" />
+                            <TextBox Text="MP0_KILLS_ARMED" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="自由瞄准击杀数 - int" />
+                            <TextBox Text="MP0_KILLS_IN_FREE_AIM" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分2"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="潜行击杀数 - int" />
+                            <TextBox Text="MP0_KILLS_STEALTH" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="反击次数 - int" />
+                            <TextBox Text="MP0_SUCCESSFUL_COUNTERS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="玩家击杀数 - int" />
+                            <TextBox Text="MP0_KILLS_PLAYERS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="玩家爆头击杀数 - int" />
+                            <TextBox Text="MP0_PLAYER_HEADSHOTS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="生存战击杀数 - int" />
+                            <TextBox Text="MP0_HORDKILLS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="帮派攻击击杀数 - int" />
+                            <TextBox Text="MP0_GHKILLS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="死斗游戏最高连杀数 - int" />
+                            <TextBox Text="MP0_DM_HIGHEST_KILLSTREAK" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox
+                        Margin="5"
+                        Header="代码部分3"
+                        Style="{StaticResource GroupBoxWebStyle}">
+                        <StackPanel Margin="5" Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="头号大敌 - string" />
+                            <TextBox Text="MP0_ARCHENEMY_NAME" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="被头号大敌杀死的次数 - int" />
+                            <TextBox Text="MP0_ARCHENEMY_KILLS" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="受害者 - string" />
+                            <TextBox Text="MP0_BIGGEST_VICTIM_NAME" ToolTip="暂无提示" />
+
+                            <TextBlock FontWeight="Bold" Text="受害者击杀数 - int" />
+                            <TextBox Text="MP0_BIGGEST_VICTIM_KILLS" ToolTip="暂无提示" />
+
+                        </StackPanel>
+                    </GroupBox>
+                </UniformGrid>
+            </ScrollViewer>
+
+        </TabItem>
+
+        <TabItem Header="工具">
+            <UniformGrid Columns="3">
+                <GroupBox
+                    Margin="5"
+                    Header="小工具1"
+                    Style="{StaticResource GroupBoxWebStyle}">
+                    <StackPanel Margin="5" Orientation="Vertical">
+                        <DockPanel LastChildFill="True">
+                            <TextBlock
+                                Width="70"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="天" />
+                            <TextBox
+                                x:Name="TextBox_d"
+                                IsReadOnly="False"
+                                PreviewKeyDown="TextBox_PreviewKeyDown"
+                                Text="0"
+                                ToolTip="暂无提示" />
+                        </DockPanel>
+
+                        <DockPanel LastChildFill="True">
+                            <TextBlock
+                                Width="70"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="小时" />
+                            <TextBox
+                                x:Name="TextBox_h"
+                                IsReadOnly="False"
+                                PreviewKeyDown="TextBox_PreviewKeyDown"
+                                Text="0"
+                                ToolTip="暂无提示" />
+                        </DockPanel>
+
+                        <DockPanel LastChildFill="True">
+                            <TextBlock
+                                Width="70"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="分钟" />
+                            <TextBox
+                                x:Name="TextBox_m"
+                                IsReadOnly="False"
+                                PreviewKeyDown="TextBox_PreviewKeyDown"
+                                Text="0"
+                                ToolTip="暂无提示" />
+                        </DockPanel>
+
+                        <DockPanel LastChildFill="True">
+                            <TextBlock
+                                Width="70"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="秒" />
+                            <TextBox
+                                x:Name="TextBox_s"
+                                IsReadOnly="False"
+                                PreviewKeyDown="TextBox_PreviewKeyDown"
+                                Text="0"
+                                ToolTip="暂无提示" />
+                        </DockPanel>
+
+                        <TextBlock />
+
+                        <DockPanel LastChildFill="True">
+                            <TextBlock
+                                Width="70"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="结果（毫秒）" />
+                            <TextBox
+                                x:Name="TextBox_ms"
+                                IsReadOnly="False"
+                                PreviewKeyDown="TextBox_PreviewKeyDown"
+                                Text="0"
+                                ToolTip="暂无提示" />
+                        </DockPanel>
+
+                        <DockPanel LastChildFill="True">
+                            <TextBlock
+                                Width="70"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="选项" />
+                            <RadioButton
+                                x:Name="RadioButton_ToMS"
+                                Margin="5"
+                                Content="时间转毫秒"
+                                IsChecked="True" />
+                            <RadioButton
+                                x:Name="RadioButton_ToTIME"
+                                Margin="5"
+                                Content="毫秒转时间" />
+                        </DockPanel>
+                        <Button
+                            x:Name="Button_Calculate"
+                            Margin="0,5,5,0"
+                            Click="Button_Calculate_Click"
+                            Content="计算"
+                            Style="{StaticResource ButtonStyle_Normal}" />
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox
+                    Margin="5"
+                    Header="小工具2"
+                    Style="{StaticResource GroupBoxWebStyle}">
+                    <StackPanel Margin="5" Orientation="Vertical" />
+                </GroupBox>
+
+                <GroupBox
+                    Margin="5"
+                    Header="小工具3"
+                    Style="{StaticResource GroupBoxWebStyle}">
+                    <StackPanel Margin="5" Orientation="Vertical" />
+                </GroupBox>
+            </UniformGrid>
+        </TabItem>
+
+    </TabControl>
+</Window>
