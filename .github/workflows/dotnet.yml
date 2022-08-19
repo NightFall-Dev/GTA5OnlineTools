@@ -23,16 +23,16 @@ jobs:
     #  uses: microsoft/setup-msbuild@v1.1
     - name: Clone repository
       run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
-      working-directory: ../../..
+      working-directory: ..
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ../../..
+      working-directory: ..
     - name: Build
       run: dotnet build --configuration Release
       working-directory: ../../..
     - name: Check if DLL got built
       run: if (-Not (Test-Path -path "bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll")) {throw 1}
-      working-directory: ../../..
+      working-directory: ..
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
