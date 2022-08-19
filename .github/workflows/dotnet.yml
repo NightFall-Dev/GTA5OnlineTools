@@ -10,9 +10,9 @@ jobs:
     outputs:
       full_sha: ${{ steps.var.outputs.full_sha }}
       short_sha: ${{ steps.var.outputs.short_sha }}
-    #defaults:
-    #  run:
-    #    working-directory: ./GTA5OnlineTools
+    defaults:
+      run:
+        working-directory: ${{env.GITHUB_WORKSPACE}}
     steps:
     #- uses: actions/checkout@v3
     - name: Setup .NET Core SDK
@@ -23,15 +23,15 @@ jobs:
     #  uses: microsoft/setup-msbuild@v1.1
     - name: Clone repository
       run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
-      working-directory: ${{env.GITHUB_WORKSPACE}}
+      #working-directory: ${{env.GITHUB_WORKSPACE}}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release
-      working-directory: GTA5OnlineTools
+      #working-directory: GTA5OnlineTools
     - name: Check if DLL got built
       run: if (-Not (Test-Path -path "bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll")) {throw 1}
-      working-directory: GTA5OnlineTools
+      #working-directory: GTA5OnlineTools
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
@@ -43,7 +43,8 @@ jobs:
       run: |
         echo "::set-output name=full_sha::$(git rev-parse HEAD)"
         echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
-      working-directory: GTA5OnlineTools
+      #working-directory: GTA5OnlineTools
+
   check_detections:
     runs-on: ubuntu-latest
     name: Check for detections in Binary and notify if necesarry
@@ -59,6 +60,7 @@ jobs:
         uses: Yimura/gtav-sigscan-action@v0.0.3
         with:
           file: ./GTA5OnlineTools.dll
+
   create_release:
     runs-on: ubuntu-latest
     name: Create Release
