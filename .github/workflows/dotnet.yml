@@ -28,7 +28,6 @@ jobs:
 
       - name: Clone repository
         run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
-        working-directory: .
 
       - name: Build 64bit release DLL
         run: |
