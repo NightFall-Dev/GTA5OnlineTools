@@ -25,7 +25,7 @@ jobs:
       run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: GTA5OnlineTools
+      working-directory: ${{env.GITHUB_WORKSPACE}}
     - name: Build
       run: dotnet build --configuration Release
       working-directory: GTA5OnlineTools
@@ -37,7 +37,7 @@ jobs:
       with:
           name: binary
           path: |
-            /GTA5OnlineTools/bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll
+            ${{env.GITHUB_WORKSPACE}}/bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll
     - name: Generate Build Info
       id: var
       run: |
