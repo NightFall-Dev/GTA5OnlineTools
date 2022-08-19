@@ -22,6 +22,6 @@ jobs:
     #  run: dir
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ./GTA5OnlineTools
+      working-directory: .
     - name: Build
       run: dotnet build --no-restore
