@@ -1,7 +1,6 @@
-name: .NET
+name: Build Project
 
 on:
-  push:
   workflow_dispatch:
 
 jobs:
