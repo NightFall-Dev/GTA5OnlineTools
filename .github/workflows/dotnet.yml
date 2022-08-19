@@ -31,6 +31,7 @@ jobs:
       working-directory: GTA5OnlineTools
     - name: Check if DLL got built
       run: if (-Not (Test-Path -path "bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll")) {throw 1}
+      working-directory: GTA5OnlineTools
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
