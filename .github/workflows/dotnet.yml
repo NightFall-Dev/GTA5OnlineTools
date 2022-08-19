@@ -23,9 +23,9 @@ jobs:
     #  uses: microsoft/setup-msbuild@v1.1
     - name: Clone repository
       run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
+      working-directory: ${{env.GITHUB_WORKSPACE}}
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ${{env.GITHUB_WORKSPACE}}
     - name: Build
       run: dotnet build --configuration Release
       working-directory: GTA5OnlineTools
