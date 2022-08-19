@@ -1,55 +1,60 @@
-name: Build Project
+name: Build
 
 on:
+  schedule:
+    # cronjob that triggers every day at 2PM UTC
+    - cron: '0 14 * * *'
   workflow_dispatch:
 
 jobs:
-  build:
-
+  build_nightly:
     runs-on: windows-latest
+    name: Build Nightly
     outputs:
       full_sha: ${{ steps.var.outputs.full_sha }}
       short_sha: ${{ steps.var.outputs.short_sha }}
-    #defaults:
-    #  run:
-    #    working-directory: .
     steps:
-    #- uses: actions/checkout@v3
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v2.1.0
-      with:
-        dotnet-version: 6.0.x
-    #- name: Setup MSBuild
-    #  uses: microsoft/setup-msbuild@v1.1
-    - name: Clone repository
-      run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
-      working-directory: ..
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ..
-    - name: Build
-      run: dotnet build --configuration Release
-      working-directory: ../../..
-    - name: Check if DLL got built
-      run: if (-Not (Test-Path -path "bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll")) {throw 1}
-      working-directory: ..
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
-      with:
+      #- uses: actions/checkout@v2.4.0
+      #  with:
+      #    submodules: recursive
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v2.1.0
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Clone repository
+        run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
+        working-directory: .
+
+      - name: Build 64bit release DLL
+        run: |
+          msbuild /p:Configuration=Release /p:Platform=x64 GTA5OnlineTools.sln /warnaserror
+
+      - name: Rename DLL to GTA5OnlineTools.dll
+        run: ren GTA5OnlineTools.dll GTA5OnlineTools.dll
+        working-directory: bin/Release/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
           name: binary
           path: |
-            ${{env.GITHUB_WORKSPACE}}/bin/x64/Release/net6.0-windows/GTA5OnlineTools.dll
-    - name: Generate Build Info
-      id: var
-      run: |
-        echo "::set-output name=full_sha::$(git rev-parse HEAD)"
-        echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
-      #working-directory: GTA5OnlineTools
+            bin/Release/GTA5OnlineTools.dll
+
+      - name: Generate Build Info
+        id: var
+        run: |
+          echo "::set-output name=full_sha::$(git rev-parse HEAD)"
+          echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
 
   check_detections:
     runs-on: ubuntu-latest
     name: Check for detections in Binary and notify if necesarry
-    needs: build
+    needs: build_nightly
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v2
@@ -62,10 +67,25 @@ jobs:
         with:
           file: ./GTA5OnlineTools.dll
 
+  check_date:
+    runs-on: ubuntu-latest
+    name: Check latest commit
+    needs: build_nightly
+    outputs:
+      should_run: ${{ steps.should_run.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - id: should_run
+        continue-on-error: true
+        name: Check if latest commit date is within the previous 24 hours
+        if: ${{ github.event_name == 'schedule' }}
+        run: test -z $(git rev-list  --after="24 hours"  ${{ github.sha }}) && echo "::set-output name=should_run::false"
+
   create_release:
     runs-on: ubuntu-latest
     name: Create Release
-    needs: [ build ]
+    needs: [ check_date, build_nightly ]
     if: ${{ needs.check_date.outputs.should_run != 'false' }}
     steps:
       - name: Download Artifact
@@ -79,6 +99,7 @@ jobs:
           sha256sum GTA5OnlineTools.dll > sha256.checksum
           echo "::set-output name=build_sha::$(cat sha256.checksum)"
           cat sha256.checksum
+
       - name: Remove previous Nightly
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
@@ -90,26 +111,31 @@ jobs:
       - name: Nightly Release
         uses: softprops/action-gh-release@v1
         with:
-          name: Nightly [${{ needs.build.outputs.short_sha }}]
+          name: Nightly [${{ needs.build_nightly.outputs.short_sha }}]
           tag_name: nightly
           body: |
             **This release has been build by Github Actions**
             [Link to build](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
             Build SHA256:
             ```
             ${{ steps.build_sha.outputs.build_sha }}
             ```
             To verify the build SHA256 during the action, click the build link, go-to "Create Release", open the Echo build sha256 step and read the sha256.
+
             Compare this build hash with one that you generated yourself from the build artifacts.
             Alternatively you can download the build artifacts, generate a SHA256 checksum and compare it with the below binary.
             Build artifacts ARE NOT automatically the same as release assets since release assets can be modified afterwards.
-            These are builds of GTA5OnlineTools, they are provided for testing purposes only:
+
+            These are nightly builds of YimMenu, they are provided for testing purposes only:
             - Test if your build environment produces a broken GTA5OnlineTools.dll
             - Test if source code is out of date and no longer compatible with the current version of GTA V
+
             If you wish to use this menu as-is you are on your own, no warranty is provided.
+
             Full Commit Hash:
             ```
-            ${{ needs.build.outputs.full_sha }}
+            ${{ needs.build_nightly.outputs.full_sha }}
             ```
           files: |
             GTA5OnlineTools.dll
