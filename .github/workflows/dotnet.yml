@@ -30,7 +30,8 @@ jobs:
         run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+         msbuild GTA5OnlineTools.sln /t:Restore /p:Configuration=Release
         working-directory: GTA5OnlineTools
 
       - name: Build 64bit release DLL
@@ -42,16 +43,12 @@ jobs:
       #  run: ren GTA5OnlineTools.dll GTA5OnlineTools.dll
       #  working-directory: GTA5OnlineTools\bin\x64\Release\net6.0-windows\
 
-      - name: Tar files
-        run: tar -czpv -f GTA5OnlineTools.tar.gz /GTA5OnlineTools/bin/
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: binary
           path: |
-            GTA5OnlineTools.tar.gz
-            GTA5OnlineTools\bin\x64\Release\net6.0-windows\GTA5OnlineTools.dll
+            GTA5OnlineTools\bin\x64\Release\net6.0-windows\
 
       - name: Generate Build Info
         id: var
@@ -147,5 +144,4 @@ jobs:
             ${{ needs.build_nightly.outputs.full_sha }}
             ```
           files: |
-            GTA5OnlineTools.dll
-            GTA5OnlineTools.tar.gz
+            *.*
