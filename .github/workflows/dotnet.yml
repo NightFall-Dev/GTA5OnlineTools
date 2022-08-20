@@ -43,14 +43,14 @@ jobs:
       #  working-directory: GTA5OnlineTools\bin\x64\Release\net6.0-windows\
 
       - name: Tar files
-        run: tar -czpv -f /GTA5OnlineTools/bin/GTA5OnlineTools.tar.gz /GTA5OnlineTools/bin/
+        run: tar -czpv -f GTA5OnlineTools.tar.gz /GTA5OnlineTools/bin/
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: binary
           path: |
-            GTA5OnlineTools.tar
+            GTA5OnlineTools.tar.gz
             GTA5OnlineTools\bin\x64\Release\net6.0-windows\GTA5OnlineTools.dll
 
       - name: Generate Build Info
