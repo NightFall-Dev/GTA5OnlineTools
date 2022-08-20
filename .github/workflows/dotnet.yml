@@ -44,6 +44,7 @@ jobs:
 
       - name: Tar files
         run: tar -cvf GTA5OnlineTools.tar /GTA5OnlineTools/bin
+        working-directory: GTA5OnlineTools
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
