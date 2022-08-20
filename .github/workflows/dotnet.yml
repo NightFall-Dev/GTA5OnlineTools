@@ -43,7 +43,7 @@ jobs:
       #  working-directory: GTA5OnlineTools\bin\x64\Release\net6.0-windows\
 
       - name: Tar files
-        run: tar -cvf GTA5OnlineTools.tar /GTA5OnlineTools/bin
+        run: tar -czpv -f GTA5OnlineTools.tar.gz /GTA5OnlineTools/
         working-directory: GTA5OnlineTools
 
       - name: Upload Artifact
@@ -149,4 +149,4 @@ jobs:
             ```
           files: |
             GTA5OnlineTools.dll
-            GTA5OnlineTools.tar
+            GTA5OnlineTools.tar.gz
