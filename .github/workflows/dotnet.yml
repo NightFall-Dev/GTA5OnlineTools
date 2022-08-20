@@ -29,6 +29,10 @@ jobs:
       - name: Clone repository
         run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
 
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: GTA5OnlineTools
+
       - name: Build 64bit release DLL
         run: |
           msbuild /p:Configuration=Release /p:Platform=x64 GTA5OnlineTools.sln /warnaserror
