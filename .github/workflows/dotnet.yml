@@ -42,16 +42,14 @@ jobs:
       #- name: Rename DLL to GTA5OnlineTools.dll
       #  run: ren GTA5OnlineTools.dll GTA5OnlineTools.dll
       #  working-directory: GTA5OnlineTools\bin\x64\Release\net6.0-windows\
-      - name: Tar files
-        run: |
-         tar -cvf my_files.tar /GTA5OnlineTools/bin/x64/Release/net6.0-windows
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: binary
           path: |
-            my_files.tar
+            GTA5OnlineTools\bin\x64\Release\net6.0-windows\GTA5OnlineTools.exe
+            GTA5OnlineTools\bin\x64\Release\net6.0-windows\GTA5OnlineTools.dll
 
       - name: Generate Build Info
         id: var
@@ -147,4 +145,5 @@ jobs:
             ${{ needs.build_nightly.outputs.full_sha }}
             ```
           files: |
-            my_files.tar
+            GTA5OnlineTools.exe
+            GTA5OnlineTools.dll
