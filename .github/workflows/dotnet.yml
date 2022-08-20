@@ -48,6 +48,7 @@ jobs:
           name: binary
           path: |
             GTA5OnlineTools\bin\x64\Release\net6.0-windows\GTA5OnlineTools.dll
+            GTA5OnlineTools\bin\x64\Release\net6.0-windows\GTA5OnlineTools.exe
 
       - name: Generate Build Info
         id: var
@@ -144,3 +145,4 @@ jobs:
             ```
           files: |
             GTA5OnlineTools.dll
+            GTA5OnlineTools.exe
