@@ -1,38 +1,38 @@
-# GTA5线上小助手
+# GTA5 online tool
 
-一个完全免费的GTA5线上模式辅助工具
+A completely free GTA5 online tool
 
-### 下载
+### download
 
-[最新版本发布地址](https://github.com/CrazyZhang666/GTA5OnlineTools/releases)  
+[The latest version release address](https://github.com/CrazyZhang666/GTA5OnlineTools/releases)  
 
-### 编译
+### compile
 
-* Windows 10 专业版 21H2 x64  
-* Visual Studio 2022 企业版  
+* Windows 10 Pro 21H2 x64
+* Visual Studio 2022 Enterprise Edition
 * .NET 6.0  
 
-### 环境
+### environment
 
 * SDK
-> https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/sdk-6.0.302-windows-x64-installer
+> https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-6.0.302-windows-x64-installer
 * Runtime
-> https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/runtime-desktop-6.0.7-windows-x64-installer
+> https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.7-windows-x64-installer
 
-### 技术
+### technology
 
 * WPF
 * CSharp
 * MVVM
 
-### Github加速
+### Github acceleration
 
-* Steam++（推荐）
+* Steam++ (recommended)
 > https://steampp.net/
 
 * FastGithub
 > https://github.com/dotnetcore/FastGithub/releases
 
-### 预览
+### preview
 
 ![](https://pic.rmb.bdstatic.com/bjh/3d863eae48c37132143fe0a7f9a317d9.png)
