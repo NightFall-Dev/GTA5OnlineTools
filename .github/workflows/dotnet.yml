@@ -27,7 +27,8 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
 
       - name: Clone repository
-        run: git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
+        run: |
+         git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
 
       - name: Restore dependencies
         run: |
