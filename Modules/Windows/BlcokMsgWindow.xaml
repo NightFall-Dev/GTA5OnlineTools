@@ -1,0 +1,95 @@
+﻿<Window
+    x:Class="GTA5OnlineTools.Modules.Windows.BlcokMsgWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:attached="clr-namespace:GTA5OnlineTools.Assets.Styles.Attached"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="Window_BlcokMsg"
+    Title="GTA5线上小助手 战局垃圾信息拦截"
+    Width="1000"
+    Height="600"
+    MinWidth="1000"
+    MinHeight="600"
+    Closing="Window_BlcokMsg_Closing"
+    Loaded="Window_BlcokMsg_Loaded"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <UniformGrid Columns="2">
+        <ListBox
+            x:Name="ListBox_BlcokWords"
+            Margin="5,5,2.5,5"
+            SelectedIndex="0"
+            Style="{StaticResource ListBoxStyle_Normal}" />
+        <StackPanel Margin="2.5,5,5,5">
+            <Label
+                attached:Icon.Value="☕"
+                Content="增加屏蔽关键词"
+                Style="{StaticResource LabelStyle_Title}" />
+            <DockPanel LastChildFill="True">
+                <Button
+                    x:Name="Button_AddBlcokWords"
+                    Click="Button_AddBlcokWords_Click"
+                    Content="增加"
+                    DockPanel.Dock="Right"
+                    Style="{StaticResource ButtonStyle_Normal}" />
+                <TextBox
+                    x:Name="TextBox_InputBlcokWord"
+                    VerticalContentAlignment="Center"
+                    DockPanel.Dock="Left"
+                    Style="{StaticResource TextBoxStyle_Normal}" />
+            </DockPanel>
+            <Button
+                x:Name="Button_RemoveBlcokWords"
+                Click="Button_RemoveBlcokWords_Click"
+                Content="删除选中项"
+                Foreground="#FF8C00"
+                Style="{StaticResource ButtonStyle_Normal}" />
+            <UniformGrid Columns="2">
+                <Button
+                    x:Name="Button_SaveBlcokWords"
+                    Click="Button_SaveBlcokWords_Click"
+                    Content="保存当前敏感词列表"
+                    Style="{StaticResource ButtonStyle_Normal}" />
+                <Button
+                    x:Name="Button_DefaultBlcokWords"
+                    Click="Button_DefaultBlcokWords_Click"
+                    Content="使用预设敏感词列表"
+                    Style="{StaticResource ButtonStyle_Normal}" />
+            </UniformGrid>
+
+            <Label
+                attached:Icon.Value="☕"
+                Content="启用功能"
+                Style="{StaticResource LabelStyle_Title}" />
+            <Button
+                x:Name="Button_InjectGameProcess"
+                Click="Button_InjectGameProcess_Click"
+                Content="注入游戏进程"
+                Style="{StaticResource ButtonStyle_Normal}" />
+            <TextBlock
+                Margin="5"
+                Foreground="Green"
+                Text="提示：关键词如何使用？假如我输入淘宝，那么只要含有淘宝这两个字的聊天栏和手机短信都会被拦截不显示"
+                TextWrapping="Wrap" />
+            <TextBlock
+                Margin="5"
+                Foreground="Green"
+                Text="提示：注入成功后会有滴一声提示音，按END键卸载注入"
+                TextWrapping="Wrap" />
+            <TextBlock
+                Margin="5"
+                Foreground="Green"
+                Text="提示：如果要修改过滤关键词，请先保存然后卸载注入后重新注入，切换战局生效"
+                TextWrapping="Wrap" />
+            <TextBlock
+                Margin="5"
+                Foreground="Green"
+                Text="提示：英文不区分大小写，QQ、qq、Qq、qQ输入qq一样都可以拦截，关键词尽量精简"
+                TextWrapping="Wrap" />
+
+        </StackPanel>
+    </UniformGrid>
+
+</Window>

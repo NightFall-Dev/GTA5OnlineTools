@@ -1,0 +1,35 @@
+﻿<UserControl
+    x:Class="GTA5OnlineTools.Views.UC4UpdateView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
+    Style="{StaticResource UserControlStyle_Loaded}"
+    mc:Ignorable="d">
+
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <StackPanel
+                Margin="10,5,0,5"
+                DockPanel.Dock="Top"
+                Orientation="Horizontal">
+                <emoji:TextBlock
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Text="📑 Changelog" />
+            </StackPanel>
+            <TextBox
+                x:Name="TextBox_Change"
+                Padding="5"
+                DockPanel.Dock="Bottom"
+                Style="{StaticResource TextBoxStyle_ShowInfo}"
+                Text="{Binding UC4UpdateModel.ChangeInfo}"
+                ToolTip="显示小助手更新日志" />
+
+        </DockPanel>
+    </Grid>
+
+</UserControl>

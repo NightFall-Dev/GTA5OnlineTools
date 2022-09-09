@@ -1,0 +1,90 @@
+﻿<UserControl
+    x:Class="GTA5OnlineTools.Views.UC2ModulesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:attached="clr-namespace:GTA5OnlineTools.Assets.Styles.Attached"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
+    Style="{StaticResource UserControlStyle_Loaded}"
+    mc:Ignorable="d">
+
+    <ScrollViewer Style="{StaticResource ScrollViewerStyle_VAHD}">
+        <WrapPanel>
+            <Button
+                attached:Icon.Value="&#xe617;"
+                attached:Text.Value="External Menu"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="ExternalMenu"
+                Content="Small assistant external menu"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+            <Button
+                attached:Icon.Value="&#xe666;"
+                attached:Text.Value="GTAHax Code Edit"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="GTAHax"
+                Content="GTAHax Code Import Editor"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+            <Button
+                attached:Icon.Value="&#xe666;"
+                attached:Text.Value="Outfits Edit"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="Outfits"
+                Content="Character Costume Editor"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+            <Button
+                attached:Icon.Value="&#xe666;"
+                attached:Text.Value="Heist Cut Edit"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="HeistCut"
+                Content="Heist Mission Bonus Editor"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+            <Button
+                attached:Icon.Value="&#xe666;"
+                attached:Text.Value="STAT Auto Scripts"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="StatAutoScripts"
+                Content="STAT automation script"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+            <Button
+                attached:Icon.Value="&#xe666;"
+                attached:Text.Value="Heist Preps Edit"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="HeistPreps"
+                Content="Heist Prerequisite Editor"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+            <Button
+                attached:Icon.Value="&#xe666;"
+                attached:Text.Value="Casino Hack"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="CasinoHack"
+                Content="casino hacker"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+            <Button
+                attached:Icon.Value="&#xe632;"
+                attached:Text.Value="Block Spam Message"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="BlcokMsg"
+                Content="Block Spam Interception"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+            <Button
+                attached:Icon.Value="&#xe63b;"
+                attached:Text.Value="BigBaseV2"
+                Command="{Binding ModelsClickCommand}"
+                CommandParameter="BigBaseV2"
+                Content="STAT edit/unlock"
+                Style="{StaticResource ButtonStyle_FunctionSelf}" />
+
+        </WrapPanel>
+    </ScrollViewer>
+
+</UserControl>

@@ -1,0 +1,167 @@
+name: Build
+
+on:
+  schedule:
+    # cronjob that triggers every day at 2PM UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  build_solution:
+    runs-on: windows-latest
+    name: Build Tool
+    outputs:
+      full_sha: ${{ steps.var.outputs.full_sha }}
+      short_sha: ${{ steps.var.outputs.short_sha }}
+    steps:
+      #- uses: actions/checkout@v2.4.0
+      #  with:
+      #    submodules: recursive
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v2.1.0
+        with:
+          dotnet-version: 6.0.302
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Clone repository
+        run: |
+         git clone https://github.com/CrazyZhang666/GTA5OnlineTools.git --recurse-submodules
+
+      - name: Restore dependencies
+        run: |
+         msbuild GTA5OnlineTools.sln /t:Restore /p:Configuration=Release
+        working-directory: GTA5OnlineTools
+
+      - name: Build 64bit release DLL
+        run: |
+          msbuild /p:Configuration=Release /p:Platform=x64 GTA5OnlineTools.sln /warnaserror
+        working-directory: GTA5OnlineTools
+
+      #- name: Create and Compress source code
+      #  run: |
+      #   7z a -t7z -m0=lzma2 -mx=9 -mmt "GTA5OnlineTools.src.7z" "GTA5OnlineTools"
+
+      #- name: Rename DLL to GTA5OnlineTools.dll
+      #  run: ren GTA5OnlineTools.dll GTA5OnlineTools.dll
+      #  working-directory: GTA5OnlineTools\bin\x64\Release\net6.0-windows\
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: binary
+          path: |
+            GTA5OnlineTools\bin\x64\Release\net6.0-windows\GTA5OnlineTools.exe
+            GTA5OnlineTools\bin\x64\Release\net6.0-windows\GTA5OnlineTools.dll
+
+      - name: Generate Build Info
+        id: var
+        run: |
+          echo "::set-output name=full_sha::$(git rev-parse HEAD)"
+          echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
+        working-directory: GTA5OnlineTools
+
+  check_detections:
+    runs-on: ubuntu-latest
+    name: Check for detections in Binary and notify if necesarry
+    needs: build_solution
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: binary
+
+      - name: Test file for detected bits
+        id: detections
+        uses: Yimura/gtav-sigscan-action@v0.0.3
+        with:
+          file: ./GTA5OnlineTools.dll
+
+  check_date:
+    runs-on: ubuntu-latest
+    name: Check latest commit
+    needs: build_solution
+    outputs:
+      should_run: ${{ steps.should_run.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: should_run
+        continue-on-error: true
+        name: Check if latest commit date is within the previous 24 hours
+        if: ${{ github.event_name == 'schedule' }}
+        run: test -z $(git rev-list  --after="24 hours"  ${{ github.sha }}) && echo "::set-output name=should_run::false"
+
+  create_release:
+    runs-on: ubuntu-latest
+    name: Create Release
+    needs: [ check_date, build_solution ]
+    if: ${{ needs.check_date.outputs.should_run != 'false' }}
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: binary
+
+      - name: Echo build sha256
+        id: build_sha
+        run: |
+          sha256sum GTA5OnlineTools.dll > sha256.checksum
+          echo "::set-output name=build_sha::$(cat sha256.checksum)"
+          cat sha256.checksum
+
+      - name: Remove previous Release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: 3.0.4.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: GTA5 online tool latest release [${{ needs.build_solution.outputs.short_sha }}]
+          tag_name: 3.0.4.6
+          body: |
+            **This release has been build by Github Actions**
+            [Link to build](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            Build SHA256:
+            ```
+            ${{ steps.build_sha.outputs.build_sha }}
+            ```
+            To verify the build SHA256 during the action, click the build link, go-to "Create Release", open the Echo build sha256 step and read the sha256.
+
+            Compare this build hash with one that you generated yourself from the build artifacts.
+            Alternatively you can download the build artifacts, generate a SHA256 checksum and compare it with the below binary.
+            Build artifacts ARE NOT automatically the same as release assets since release assets can be modified afterwards.
+
+            These are release build of GTA5OnlineTools, they are provided for testing purposes only:
+            - Test if your build environment produces a broken GTA5OnlineTools.dll
+            - Test if your build environment produces a broken GTA5OnlineTools.exe
+            - Test if source code is out of date and no longer compatible with the current version of GTA V
+
+            If you wish to use this menu as-is you are on your own, no warranty is provided.
+
+            Full Commit Hash:
+            ```
+            ${{ needs.build_solution.outputs.full_sha }}
+            ```
+            
+            ### Changelogs
+            2022/08/09 v3.0.4.6
+            -Update YimMenu version
+            
+            ### Runtime
+            - .NET 6.0 Desktop Runtime (v6.0.7) - Windows x64 Installer
+            [Download](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.7-windows-x64-installer)
+            
+            ### Download link
+            [蓝奏云盘](https://crazyzhang.lanzouf.com/b04md71ve)
+            [123云盘](https://www.123pan.com/s/QEorVv-Bfzv3)
+          files: |
+            GTA5OnlineTools.exe
+            GTA5OnlineTools.dll
