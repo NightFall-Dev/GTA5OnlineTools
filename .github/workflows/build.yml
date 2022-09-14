@@ -1,9 +1,6 @@
 name: Build
 
 on:
-  schedule:
-    # cronjob that triggers every day at 2PM UTC
-    - cron: '0 8 * * *'
   workflow_dispatch:
 
 jobs:
